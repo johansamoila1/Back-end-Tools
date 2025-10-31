@@ -139,7 +139,6 @@ namespace Back_end_harjoitustyö.Services
                 CreatedAt = updatedMessage.CreatedAt
             };
         }
-
         public async Task<bool> DeleteMessageAsync(int id)
         {
             return await _messageRepository.DeleteAsync(id);
