@@ -115,7 +115,7 @@ POST /api/Users
 
 {
   "username": "omakayttaja",                 Mitä tapahtuu?
-  "password": "salasana123",                 - Salasana hashataan BCrypt:llä.
+  "password": "salasana123",                 - Salasana salataan BCrypt:llä.
   "firstName": "Etunimi",                    - Luodaan uusi käyttäjä JoinDate:lla.
   "lastName": "Sukunimi"                     - Palautetaan luotu profiili (salasana piilotettu).
 }
