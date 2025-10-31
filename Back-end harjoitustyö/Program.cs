@@ -15,8 +15,6 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>         // <-- Api-avain pakote pois päältä testausta varten
 {
-    // 🔄 POISTA API-KEY VAATIMUS SWAGGERISTA
-    // (Voit jättää nämä kommenteiksi jos haluat)
     /*
     c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
     {
