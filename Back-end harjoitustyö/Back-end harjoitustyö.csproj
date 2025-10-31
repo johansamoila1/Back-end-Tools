@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Back_end_harjoitustyö</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Middleware\NewFolder\**" />
+		<Content Remove="Middleware\NewFolder\**" />
+		<EmbeddedResource Remove="Middleware\NewFolder\**" />
+		<None Remove="Middleware\NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="Middleware\TokenAuthMiddleware.cs" />
+		<Compile Remove="Services\TokenService.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.20" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.20">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.21" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.20" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.20">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,6 @@
+@Back_end_harjoitustyö_HostAddress = http://localhost:5038
+
+GET {{Back_end_harjoitustyö_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
