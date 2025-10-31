@@ -51,36 +51,36 @@ Sovellus mahdollistaa:
 ```plaintext
 Back_end_harjoitustyö/
 │
-├── Controllers/
-│   ├── MessagesController.cs
-│   └── UsersController.cs
+├── Controllers/                    HTTP-pyyntöjen käsittelijät
+│   ├── MessagesController.cs       - Viestien CRUD-toiminnot
+│   └── UsersController.cs          - Käyttäjien hallinta ja kirjautuminen
 │
-├── Models/
-│   ├── Message.cs
-│   ├── MessageAppContext.cs
-│   ├── MessageDTO.cs
-│   ├── User.cs
-│   ├── UserDTO.cs
-│   └── UserCreateDTO.cs
+├── Models/                         Tietokantamallit
+│   ├── Message.cs                  - Käyttäjä ja viestimallit
+│   ├── MessageAppContext.cs        - Tietokantayhteys
+│   ├── MessageDTO.cs               - Tietojensiirto
+│   ├── User.cs                     
+│   ├── UserDTO.cs                  
+│   
 │
-├── Repositories/
-│   ├── IMessageRepository.cs
-│   ├── IUserRepository.cs
+├── Repositories/                  Tietokantatoiminnot
+│   ├── IMessageRepository.cs      - Tietokantarajapinnat
+│   ├── IUserRepository.cs        
 │   ├── MessageRepository.cs
 │   └── UserRepository.cs
 │
-├── Services/
-│   ├── IMessageService.cs
+├── Services/                      Toiminnanlogiikka (oikeudet, validointi
+│   ├── IMessageService.cs         - Käyttäjä ja viestipalven rajapinta
 │   ├── IUserService.cs
 │   ├── MessageService.cs
 │   └── UserService.cs
 │
-├── Middleware/
-│   └── ApiKeyMiddleware.cs
+├── Middleware/                    Pyyntöjen esikäsittely
+│   └── ApiKeyMiddleware.cs        - API-avaimen tarkistus
 │
-├── appsettings.json
-├── Program.cs
-└── README.md            
+├── appsettings.json               Tietokanta asetukset
+├── Program.cs                     Sovelluksen käynnistys
+└── README.md                      Sovelluksen dokumentointi
 ```
 ## API-rajapinnat
 
@@ -109,14 +109,15 @@ Back_end_harjoitustyö/
 ## Käyttöohje
 
 1. Käyttäjätunnuksen luominen
-```http
+```bash
+
 POST /api/Users
 
 {
-  "username": "omakayttaja",
-  "password": "salasana123",
-  "firstName": "Etunimi",
-  "lastName": "Sukunimi"
+  "username": "omakayttaja",                 Mitä tapahtuu?
+  "password": "salasana123",                 - Salasana hashataan BCrypt:llä.
+  "firstName": "Etunimi",                    - Luodaan uusi käyttäjä JoinDate:lla.
+  "lastName": "Sukunimi"                     - Palautetaan luotu profiili (salasana piilotettu).
 }
 
 Vastaus:
@@ -132,14 +133,14 @@ Vastaus:
 ```
 
 2. Sisäänkirjautuminen
-```http
+```bash
 POST /api/Users/login
 
 {
-  "username": "omakayttaja",
-  "password": "salasana123"
-}
-
+  "username": "omakayttaja",                  Mitä tapahtuu?
+  "password": "salasana123"                   - Tarkistetaan käyttäjä ja salasana.
+}                                             - Päivitetään LastLogin-aika.
+                                              - Palautetaan UserId ja Username.
 Vastaus:
 
 {
@@ -149,60 +150,59 @@ Vastaus:
 ```
 
 3. Viestien lähettäminen
+```bash
 
-```http
-
-Julkinen:
+Julkinen viesti:
 
 POST /api/Messages
 currentUserId: 1
 
 {
-  "title": "Hei kaikille!",
-  "content": "Tämä on julkinen viesti",
-  "senderId": 1,
-  "receiverId": null
+  "title": "Hei kaikille!",                   Mitä tapahtuu?
+  "content": "Tämä on julkinen viesti",       - Tarkistetaan, että senderId == currentUserId.
+  "senderId": 1,                              - receiverId == null -> viesti on julkinen.
+  "receiverId": null                          - Tallennetaan CreatedAt automaattisesti.
 }
 
-Yksityinen:
+Yksityinen viesti:
 
 POST /api/Messages
 currentUserId: 1
 
 {
-  "title": "Yksityinen viesti",
-  "content": "Tämä vain sinulle",
-  "senderId": 1,
+  "title": "Yksityinen viesti",              Mitä tapahtuu?
+  "content": "Tämä vain sinulle",            - Tarkistetaan, että vastaanottaja (ID 2) on olemassa.
+  "senderId": 1,                             - Vain lähettäjä ja vastaanottaja näkevät viestin.
   "receiverId": 2
 }
 
-Vastaus:
+Vastaus aiempaan viestiin:
 
 POST /api/Messages
 currentUserId: 1
 
 {
-  "title": "Aiempi viesti",
-  "content": "Vastaus edelliseen viestiin",
-  "senderId": 1,
-  "receiverId": null,
+  "title": "Aiempi viesti",                
+  "content": "Vastaus viestiin",            Mitä tapahtuu?
+  "senderId": 1,                            - Tarkistetaan, että previousMessageId (1) on olemassa.
+  "receiverId": null,                       - Luodaan viestiketju.
   "previousMessageId": 1
 }
 ```
 4. Viestien lukeminen
+```bash
 
-```http
-Kaikki:
-
-GET /api/Messages/public
+Kaikki:                                    Mitä tapahtuu?
+                                           - Haetaan kaikki viestit, joissa receiverId == null
+GET /api/Messages/public                   - Näkyy kaikille käyttäjille (ei kirjautumista vaadita)
 
 Omat:
 
-GET /api/Messages/private/1
-currentUserId: 1
+GET /api/Messages/private/1                - Tarkistetaan, että userId == currentUserId
+currentUserId: 1                           - Haetaan vain viestit, joissa receiverId == 1
 
-Yksittäinen:
+Yksittäinen viesti:
 
-GET /api/Messages/1
-currentUserId: 1
-```
+GET /api/Messages/1                        - Jos viesti on julkinen -> kaikki näkevät
+currentUserId: 1                           - Jos yksityinen -> vain lähettäjä tai vastaanottaja.
+                                           - Muuten: virhe 401.
