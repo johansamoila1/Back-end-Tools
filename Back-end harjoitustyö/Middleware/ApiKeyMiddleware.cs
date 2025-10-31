@@ -36,7 +36,6 @@ namespace Back_end_harjoitustyö.Middleware
                 await context.Response.WriteAsync("Invalid API key");
                 return;
             }
-
             await next(context);
         }
     }
